@@ -1,0 +1,14 @@
+
+.container{
+  max-width: 1220px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 50px;
+}
+.table{
+  margin-bottom: 40px !important;
+}
+.pagination{
+  margin-bottom: 50px;
+  text-align: center;
+}
