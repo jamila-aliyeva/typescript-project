@@ -12,11 +12,12 @@ import { LIMIT } from "../constants";
 import { getSkills, skillName } from "../redux/slice/skills";
 import { useAppDispatch } from "../redux/hooks";
 import { Link } from "react-router-dom";
+import { RootState } from "../redux/store";
 
 const SkillsPage = () => {
   const dispatch = useAppDispatch();
   const { skills, loading, total} = useSelector(
-    (state) => state[skillName]
+    (state: RootState) => state[skillName]
   );
 
   const [search, setSearch] = useState("");
@@ -26,7 +27,7 @@ const SkillsPage = () => {
     dispatch(getSkills({ search, page }));
   }, [dispatch, search, page]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setPage(1);
   };

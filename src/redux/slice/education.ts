@@ -12,7 +12,7 @@ const initialState = {
 
 export const getEducations = createAsyncThunk(
   "education/fetching",
-  async ({ search, page }) => {
+  async ({ search, page }: { search: string; page: number }) => {
     const params = { search, page, limit: LIMIT };
     const { data } = await request.get("education", { params });
     return data;

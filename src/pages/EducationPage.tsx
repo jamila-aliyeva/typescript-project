@@ -12,11 +12,12 @@ import { LIMIT } from "../constants";
 import { educationName, getEducations } from "../redux/slice/education";
 import { useAppDispatch } from "../redux/hooks";
 import { Link } from "react-router-dom";
+import { RootState } from "../redux/store";
 
 const Education = () => {
   const dispatch = useAppDispatch();
   const { education, loading, total } = useSelector(
-    (state) => state[educationName]
+    (state: RootState) => state[educationName]
   );
 
   const [search, setSearch] = useState("");
@@ -28,7 +29,7 @@ const Education = () => {
 
   
 
-  const handleSearch = (e) => {
+  const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setPage(1);
   };

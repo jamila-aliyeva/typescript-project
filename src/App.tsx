@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import LoginPage from "./pages/loginPage"
-import UserLayout from "./components/Layout"
+// import UserLayout from "./components/Layout"
 import Education from "./pages/EducationPage"
 import SkillsPage from "./pages/SkillsPage"
 // import { useContext } from "react";
