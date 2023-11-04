@@ -1,6 +1,6 @@
-interface Education {
+interface EducationType {
   name: string;
   description: string;
 }
 
-export default Education;
+export default EducationType;

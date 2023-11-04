@@ -1,0 +1,117 @@
+.login-page, .register{
+    background-color: rgb(248, 221, 189);
+    display: flex;
+    align-items: center ;
+    justify-content: center ;
+    flex-direction: column ;
+    height: 100vh;
+}
+.form-wrap{
+    
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+    p{
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.3px;
+        margin: 20px 0;
+    }
+    a{
+        margin: 15px 0px 10px;
+        color: #333;
+        font-size: 17px;
+        text-decoration: none;
+    }
+    button{
+        margin-top: 10px;
+        cursor: pointer;
+        padding: 10px 45px;
+        background-color: rgb(157, 115, 65);
+        color: #fff;
+        font-size: 12px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        text-transform: uppercase;
+    }
+    button.hidden{
+        background-color: transparent;
+        border-color: white;
+    }
+    form{
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        height: 100%;
+    }
+    input{
+        background-color: #eee;
+        border: none;
+        margin: 8px 0;
+        padding: 10px 15px;
+        font-size: 13px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+    }
+    .form-container{
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-out;
+    }
+    .sign-in{
+        left: 0;
+        z-index: 2;
+    }
+    .social-icons{
+       margin: 20px 0 ; 
+       a{
+        border: 1px solid #ccc;
+        border-radius: 20%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 3px;
+        width: 40px;
+       height: 40px;
+       }
+    }
+    .toggle-container{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: all 0.6s ease-out;
+        z-index: 1000;
+        background-color: rgb(157, 115, 65);
+        border-radius:  150px 0 0 100px;
+    }
+    .toggle-panel{
+        position: absolute;
+        padding: 0 30px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+h2, p{
+    color: #fff;
+}
+h2{
+    font-size: 28px;
+}
+    }
+
+}

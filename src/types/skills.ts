@@ -1,5 +1,5 @@
-interface Skill {
+interface SkillType {
   name: string;
   percent: number;
 }
-export default Skill;
+export default SkillType;

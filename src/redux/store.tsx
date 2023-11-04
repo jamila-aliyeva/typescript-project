@@ -3,16 +3,16 @@ import { Provider } from "react-redux";
 import Children from "../types/childer";
 import skillReducer, { skillName } from "./slice/skills";
 import educationReducer, { educationName } from "./slice/education";
-
-
+import { usersName, usersReducer } from "./query/user";
 
 const reducer = {
+  [usersName]: usersReducer,
   [skillName]: skillReducer,
   [educationName]: educationReducer,
 };
 
 const Store = configureStore({
-  reducer
+  reducer,
 });
 
 const StoreProvider = ({ children }: Children) => {
