@@ -2,7 +2,6 @@ import { create } from "zustand";
 import request from "../server";
 import { FormInstance } from "antd";
 
-import Crud from "./crud";
 import EducationType from "../types/education";
 
 interface EducationState {

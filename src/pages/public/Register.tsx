@@ -2,15 +2,14 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 
-// import "./style.scss";
-
-// import { message } from "antd";
+import { message } from "antd";
 import AOS from "aos";
 import request from "../../server";
 import { TOKEN, USER } from "../../constants";
+import { setAuth } from "../../redux/slice/auth";
 
 const Register = () => {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const submit = async (e) => {
     e.preventDefault();
@@ -29,8 +28,8 @@ const Register = () => {
     Cookies.set(TOKEN, token);
     localStorage.setItem(USER, JSON.stringify(user));
 
-    // dispatch(setAuth(user));
-    // message.success("Successfully registered and you are a user");
+    dispatch(setAuth(user));
+    message.success("Successfully registered and you are a user");
   };
 
   useEffect(() => {

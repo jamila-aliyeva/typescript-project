@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import {
   GooglePlusOutlined,
@@ -8,42 +7,24 @@ import {
   LinkedinOutlined,
 } from "@ant-design/icons";
 
-import { useDispatch } from "react-redux";
-
 import AOS from "aos";
 
 import "./LoginPage.scss";
 import { useEffect } from "react";
-import request from "../../server";
-import { TOKEN, USER } from "../../constants";
+import useLogin from "../../zustand/login";
 
 const LoginPage = () => {
-  //   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const login = async (e) => {
-    e.preventDefault();
-    const userData = {
-      username: e.target.username.value,
-      password: e.target.password.value,
-    };
+  const { login } = useLogin();
 
-    const {
-      data: { token, user },
-    } = await request.post("auth/login", userData);
-
-    Cookies.set(TOKEN, token);
-    localStorage.setItem(USER, JSON.stringify(user));
-    navigate("/dashboard");
-
-    // dispatch(setAuth(user));
-  };
   const register = async (e) => {
     e.preventDefault();
     navigate("/register");
   };
 
   useEffect(() => {
+    login();
     AOS.init({ duration: "1500" });
   }, []);
 

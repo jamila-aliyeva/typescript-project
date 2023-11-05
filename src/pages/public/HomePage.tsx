@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 
 import "./HomePage.scss";
 import AOS from "aos";
+import { authName } from "../../redux/slice/auth";
+import { useSelector } from "react-redux";
 // import { authName } from "../../../redux/slice/auth";
 // import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  //   const { isAuthenticated } = useSelector((state) => state[authName]);
+  const { isAuthenticated } = useSelector((state) => state[authName]);
   const [navOpen, setNavOpen] = useState(false);
   useEffect(() => {
     AOS.init({ duration: "2600" });
@@ -38,8 +40,11 @@ const HomePage = () => {
                   </Link> */}
                 </div>
                 <div className="home-btns" data-aos="fade-down">
-                  {/* <Link to="/account">Account</Link> */}
-                  <Link to="/login">Login</Link>
+                  {isAuthenticated ? (
+                    <Link to="/account">Account</Link>
+                  ) : (
+                    <Link to="/login">Login</Link>
+                  )}
                   <Link to="/register" onClick={() => setNavOpen(false)}>
                     Register
                   </Link>
