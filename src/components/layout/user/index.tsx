@@ -36,7 +36,7 @@ const UserLayout = () => {
   }
   async function getLastName() {
     try {
-      let res = await request.get("auth/me");
+      const res = await request.get("auth/me");
       setlastName(res.data.lastName);
       console.log(res.data.lastName);
     } catch (err) {
