@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Education from "./pages/admin/EducationPage";
 import Experience from "./pages/admin/ExperiensesPage";
-import AdminLayout from "./components/layout/admin";
 import Dashboard from "./pages/admin/Dashboard";
 import Portfolios from "./pages/admin/Portfolios";
 import UserPage from "./pages/admin/UserPage";
@@ -19,8 +18,11 @@ import UserSkill from "./pages/user/UserSkill";
 import UserEducation from "./pages/user/userEducation";
 import UserPortfolio from "./pages/user/UserPortfolio";
 import AccountPage from "./pages/public/AccountPage";
+import AdminLayout from "./components/layout/admin";
+import useLogin from "./zustand/login";
 
 function App() {
+  const { isAuthenticated, role } = useLogin();
   return (
     <BrowserRouter>
       <Routes>
@@ -34,16 +36,15 @@ function App() {
           <Route path="/userEducation" element={<UserEducation />} />
           <Route path="/userPortfolios" element={<UserPortfolio />} />
         </Route>
-        {/* <Route
-          path="/"
+        <Route
           element={
-            isAuthenticated && user?.role === "admin" ? (
+            isAuthenticated && role === "admin" ? (
               <AdminLayout />
             ) : (
               <Navigate to="/login" />
             )
-          }> */}
-        <Route path="/" element={<AdminLayout />}>
+          }>
+          {/* <Route path="/" element={<AdminLayout />}> */}
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="skills" element={<SkillsPage />} />
           <Route path="education" element={<Education />} />
