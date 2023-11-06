@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  GooglePlusOutlined,
-  FacebookOutlined,
-  GithubOutlined,
-  LinkedinOutlined,
-} from "@ant-design/icons";
+// import {
+//   GooglePlusOutlined,
+//   FacebookOutlined,
+//   GithubOutlined,
+//   LinkedinOutlined,
+// } from "@ant-design/icons";
 
 import AOS from "aos";
 
