@@ -7,6 +7,7 @@ import useSkills from "../../zustand/skills";
 const SkillsPage = () => {
   const [form] = Form.useForm();
   const [data, setdata] = useState();
+  console.log(data);
 
   const {
     search,

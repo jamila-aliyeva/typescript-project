@@ -19,10 +19,13 @@ import UserEducation from "./pages/user/userEducation";
 import UserPortfolio from "./pages/user/UserPortfolio";
 import AccountPage from "./pages/public/AccountPage";
 import AdminLayout from "./components/layout/admin";
-import useLogin from "./zustand/login";
+import { authName } from "./redux/slice/auth";
+import { useSelector } from "react-redux";
+// import useLogin from "./zustand/login";
 
 function App() {
-  const { isAuthenticated, role } = useLogin();
+  // const { isAuthenticated, role } = useLogin();
+  const { isAuthenticated, user } = useSelector((state) => state[authName]);
   return (
     <BrowserRouter>
       <Routes>
@@ -38,7 +41,7 @@ function App() {
         </Route>
         <Route
           element={
-            isAuthenticated && role === "admin" ? (
+            isAuthenticated && user?.role === "admin" ? (
               <AdminLayout />
             ) : (
               <Navigate to="/login" />

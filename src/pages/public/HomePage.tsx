@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import { HiBars3BottomRight, HiXMark } from "react-icons/hi2";
 
 import "./HomePage.scss";
 import AOS from "aos";
-import { authName } from "../../redux/slice/auth";
-import { useSelector } from "react-redux";
-// import { authName } from "../../../redux/slice/auth";
-// import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const { isAuthenticated } = useSelector((state) => state[authName]);
   const [navOpen, setNavOpen] = useState(false);
   useEffect(() => {
     AOS.init({ duration: "2600" });
