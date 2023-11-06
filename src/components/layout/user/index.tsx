@@ -26,7 +26,7 @@ const UserLayout = () => {
 
   async function getUser() {
     try {
-      let res = await request.get("auth/me");
+      const res = await request.get("auth/me");
       setFirstName(res.data.firstName);
       console.log(res.data.firstName);
     } catch (err) {
