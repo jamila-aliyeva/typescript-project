@@ -7,6 +7,7 @@ import AOS from "aos";
 import request from "../../server";
 import { TOKEN, USER } from "../../constants";
 import { setAuth } from "../../redux/slice/auth";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -56,7 +57,9 @@ const Register = () => {
                 <input type="text" name="username" placeholder="Username" />
                 <input type="password" name="password" placeholder="Password" />
                 {/* <input type="password" placeholder="Confirm password" /> */}
-                <button>Register</button>
+                <Link to="/profile">
+                  <button>Register</button>
+                </Link>
               </form>
             </div>
           </div>

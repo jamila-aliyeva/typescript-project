@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import {
@@ -10,15 +10,44 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 
-import { Layout, Menu, Button, theme } from "antd";
+import { Layout, Menu, Button, theme, message } from "antd";
 
 import "./style.scss";
+import request from "../../../server";
 
 const { Header, Sider, Content } = Layout;
 
 const UserLayout = () => {
+  const [firstName, setFirstName] = useState([]);
+  const [lastName, setlastName] = useState([]);
+
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+
+  async function getUser() {
+    try {
+      let res = await request.get("auth/me");
+      setFirstName(res.data.firstName);
+      console.log(res.data.firstName);
+    } catch (err) {
+      console.log(err);
+      message.error("error!!!");
+    }
+  }
+  async function getLastName() {
+    try {
+      let res = await request.get("auth/me");
+      setlastName(res.data.lastName);
+      console.log(res.data.lastName);
+    } catch (err) {
+      console.log(err);
+      message.error("error!!!");
+    }
+  }
+  useEffect(() => {
+    getUser();
+    getLastName();
+  }, []);
 
   const {
     token: { colorBgContainer },
@@ -82,6 +111,7 @@ const UserLayout = () => {
 
           <div>
             <Link
+              to="/account"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -93,7 +123,9 @@ const UserLayout = () => {
                 src="https://img.freepik.com/free-photo/glowing-spaceship-orbits-planet-starry-galaxy-generated-by-ai_188544-9655.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1699056000&semt=sph"
                 alt=""
               />
-              <h4 style={{ color: "white" }}>User's name</h4>
+              <h4 style={{ color: "white" }}>
+                {firstName} {lastName}
+              </h4>
             </Link>
           </div>
         </Header>

@@ -65,7 +65,7 @@ const useSkills = create<SkillsState>()((set, get) => {
         get().getSkills();
         form.resetFields();
       } finally {
-        setState({ isModalLoading: false });
+        setState({ isModalOpen: false, isModalLoading: false });
       }
     },
     handleSearch: (e) => {

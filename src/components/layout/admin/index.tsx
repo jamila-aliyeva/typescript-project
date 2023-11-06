@@ -13,18 +13,21 @@ import {
   BuildOutlined,
 } from "@ant-design/icons";
 
-import { Layout, Menu, Button, theme, Modal, Badge } from "antd";
+import { Layout, Menu, Button, theme, Modal, Badge, message } from "antd";
 
 import "./style.scss";
 import { IS_LOGIN } from "../../../constants";
 import useUsers from "../../../zustand/users";
 import UsersyType from "../../../types/user";
+import request from "../../../server";
 // import { useGetUsersQuery } from "../../../redux/query/user";
 
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout = ({ setIsLogin }) => {
-  const [data, setdata] = useState();
+  const [user, setUser] = useState([]);
+  const [data, setdata] = useState([]);
+  const [photo, setPhoto] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
@@ -33,9 +36,31 @@ const AdminLayout = ({ setIsLogin }) => {
   //     role: "user",
   //   });
 
+  async function getUser() {
+    try {
+      let res = await request.get("auth/me");
+      setUser(res.data.firstName);
+      console.log(res.data);
+
+      res;
+    } catch (err) {
+      console.log(err);
+      message.error("error!!!");
+    }
+  }
+  async function getPhoto() {
+    try {
+      let { data } = await request.get("auth/me");
+      setPhoto(data.photo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const { skills, total, getUsers } = useUsers();
 
   useEffect(() => {
+    getPhoto();
+    getUser();
     getUsers();
     setdata<UsersyType[]>(skills);
   }, [getUsers]);
@@ -150,10 +175,13 @@ const AdminLayout = ({ setIsLogin }) => {
               }}>
               <img
                 style={{ width: "35px", height: "36px", borderRadius: "50%" }}
-                src="https://img.freepik.com/free-photo/glowing-spaceship-orbits-planet-starry-galaxy-generated-by-ai_188544-9655.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1699056000&semt=sph"
+                src={photo}
                 alt=""
               />
-              <h4 style={{ color: "white" }}>Admin's name</h4>
+              <h4 style={{ color: "white" }}>
+                {user}
+                {}
+              </h4>
             </Link>
           </div>
         </Header>

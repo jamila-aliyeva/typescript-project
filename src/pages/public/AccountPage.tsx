@@ -63,6 +63,7 @@ const AccountPage = () => {
     dispatch(removeAuth());
     navigate("/");
   };
+
   return (
     <section className="account">
       <div className="container">
@@ -74,6 +75,7 @@ const AccountPage = () => {
               <h3>Your Basic Information</h3>
               <div className="border"></div>
               <Form
+                form={form}
                 className="register-form"
                 name="register"
                 labelCol={{
@@ -171,6 +173,9 @@ const AccountPage = () => {
                           />
                         </Form.Item>
                       </div>
+                      <Form.Item label="About me" name="info">
+                        <Input.TextArea />
+                      </Form.Item>
 
                       <Form.Item
                         className="btn-container"
@@ -185,7 +190,7 @@ const AccountPage = () => {
                         </div>
                       </Form.Item>
                     </div>
-                    <div>
+                    {/* <div>
                       <Form
                         name="password"
                         className="reset-password"
@@ -262,7 +267,7 @@ const AccountPage = () => {
                           </div>
                         </Form.Item>
                       </Form>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </Form>
@@ -288,13 +293,10 @@ const AccountPage = () => {
                 />
               </div>
             </div>
-            <div className="user-info">
+            {/* <div className="user-info">
               <h3>About me</h3>
               <div className="border"></div>
-              <Form.Item name="info">
-                <Input.TextArea />
-              </Form.Item>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
