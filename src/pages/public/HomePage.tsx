@@ -40,11 +40,8 @@ const HomePage = () => {
                   </Link> */}
                 </div>
                 <div className="home-btns" data-aos="fade-down">
-                  {isAuthenticated ? (
-                    <Link to="/account">Account</Link>
-                  ) : (
-                    <Link to="/login">Login</Link>
-                  )}
+                  <Link to="/login">Login</Link>
+
                   <Link to="/register" onClick={() => setNavOpen(false)}>
                     Register
                   </Link>
