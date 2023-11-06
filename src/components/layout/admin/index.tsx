@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -11,18 +11,20 @@ import {
   DashboardOutlined,
   CopyOutlined,
   BuildOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 
 import { Layout, Menu, Button, theme, Modal, Badge } from "antd";
 
 import "./style.scss";
 import { IS_LOGIN } from "../../../constants";
+import useUsers from "../../../zustand/users";
+import UsersyType from "../../../types/user";
 // import { useGetUsersQuery } from "../../../redux/query/user";
 
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout = ({ setIsLogin }) => {
+  const [data, setdata] = useState();
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
@@ -30,6 +32,13 @@ const AdminLayout = ({ setIsLogin }) => {
   //   const { data: { total } = { users: [], total: 0 } } = useGetUsersQuery({
   //     role: "user",
   //   });
+
+  const { skills, total, getUsers } = useUsers();
+
+  useEffect(() => {
+    getUsers();
+    setdata<UsersyType[]>(skills);
+  }, [getUsers]);
 
   const {
     token: { colorBgContainer },
@@ -64,12 +73,6 @@ const AdminLayout = ({ setIsLogin }) => {
               icon: <DashboardOutlined />,
               label: <Link to="/dashboard">Dashboard</Link>,
             },
-            {
-              key: "/users",
-              icon: <UserOutlined />,
-              label: <Link to="/users">Users</Link>,
-            },
-
             {
               key: "/skills",
               icon: <CopyOutlined />,
@@ -124,12 +127,12 @@ const AdminLayout = ({ setIsLogin }) => {
 
           <div style={{ display: "flex", alignItems: "center" }}>
             <Link
-              to="/"
+              to="/users"
               className="notification"
               style={{
                 paddingInline: "30px",
               }}>
-              <Badge showZero s>
+              <Badge count={total} showZero s>
                 <img
                   style={{ width: "30px" }}
                   src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes/128/notification-circle-blue-512.png"
@@ -138,6 +141,7 @@ const AdminLayout = ({ setIsLogin }) => {
               </Badge>
             </Link>
             <Link
+              to="/account"
               style={{
                 display: "flex",
                 alignItems: "center",

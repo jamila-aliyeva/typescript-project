@@ -1,12 +1,40 @@
-import { Button, Flex, Form, Input, Modal, Space, Table } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Pagination,
+  Space,
+  Table,
+  message,
+} from "antd";
 import { Fragment, useEffect, useState } from "react";
 
 import UsersyType from "../../types/user";
 import useUsers from "../../zustand/users";
+import { LIMIT } from "../../constants";
+
+import {
+  useGetUserMutation,
+  useUpgradeUserMutation,
+} from "../../redux/query/user";
 
 const UserPage = () => {
+  const [page, setPage] = useState(1);
   const [form] = Form.useForm();
   const [data, setdata] = useState();
+
+  const [AddUser] = useUpgradeUserMutation();
+  const [getUser] = useGetUserMutation();
+
+  const upgradeToClient = async (id) => {
+    const values = await getUser(id);
+    values.role = "client";
+    await AddUser({ id, values });
+    // refetch();
+    message.success("User is added to client");
+  };
 
   const {
     search,
@@ -26,9 +54,9 @@ const UserPage = () => {
   } = useUsers();
 
   useEffect(() => {
-    getUsers();
+    getUsers({ page });
     setdata<UsersyType[]>(skills);
-  }, [getUsers]);
+  }, [getUsers, page]);
 
   const columns = [
     {
@@ -71,6 +99,7 @@ const UserPage = () => {
           <Button type="primary" danger onClick={() => handleDelete(id)}>
             Delete
           </Button>
+          <Button onClick={() => upgradeToClient(id)}>Add to Client</Button>
         </Space>
       ),
     },
@@ -92,7 +121,7 @@ const UserPage = () => {
               placeholder="Searching..."
             />
             <Button onClick={() => showModal(form)} type="dashed">
-              Add skill
+              Add user
             </Button>
           </Flex>
         )}
@@ -102,19 +131,19 @@ const UserPage = () => {
         columns={columns}
       />
 
-      {/* {total > LIMIT ? (
+      {total > LIMIT ? (
         <Pagination
           total={total}
           pageSize={LIMIT}
           current={page}
           onChange={(page) => setPage(page)}
         />
-      ) : null} */}
+      ) : null}
       <Modal
         title="Category data"
         maskClosable={false}
         confirmLoading={isModalLoading}
-        okText={selected === null ? "Add education" : "Save education"}
+        okText={selected === null ? "Add user" : "Save user"}
         open={isModalOpen}
         onOk={() => handleOk(form)}
         onCancel={closeModal}>

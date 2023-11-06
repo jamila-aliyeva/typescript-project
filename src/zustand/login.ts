@@ -26,7 +26,7 @@ const useLogin = create<LoginState>()((set, get) => {
       if (get().role === "admin") {
         navigate("dashboard");
       } else if (get().role === "user") {
-        navigate("/user");
+        navigate("/profile");
       } else {
         navigate("/");
       }

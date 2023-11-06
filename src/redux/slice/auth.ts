@@ -2,7 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { TOKEN, USER } from "../../constants";
 
-const initialState = {
+interface AuthState {
+  isAuthenticated: boolean;
+  user: null | undefined;
+}
+const initialState: AuthState = {
   isAuthenticated: Boolean(Cookies.get(TOKEN)),
   user: JSON.parse(localStorage.getItem(USER)),
 };

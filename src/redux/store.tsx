@@ -1,20 +1,23 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { usersName, usersReducer } from "./query/user";
 import Children from "../types/childer";
-import skillReducer, { skillName } from "./slice/skills";
-import educationReducer, { educationName } from "./slice/education";
 import authReducer, { authName } from "./slice/auth";
+import usersQuery, { usersName, usersReducer } from "./query/user";
+import authQuery, {
+  authAccountName,
+  authAccountReducer,
+} from "./query/account";
 
 const reducer = {
   [authName]: authReducer,
   [usersName]: usersReducer,
-  [skillName]: skillReducer,
-  [educationName]: educationReducer,
+  [authAccountName]: authAccountReducer,
 };
 
 const Store = configureStore({
   reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(usersQuery.middleware, authQuery.middleware),
 });
 
 const StoreProvider = ({ children }: Children) => {

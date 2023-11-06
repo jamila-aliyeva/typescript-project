@@ -18,6 +18,7 @@ import ProfilePage from "./pages/user/ProfilePage";
 import UserSkill from "./pages/user/UserSkill";
 import UserEducation from "./pages/user/userEducation";
 import UserPortfolio from "./pages/user/UserPortfolio";
+import AccountPage from "./pages/public/AccountPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/" element={<UserLayout />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/userSkill" element={<UserSkill />} />

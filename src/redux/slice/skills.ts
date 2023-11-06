@@ -2,10 +2,10 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { LIMIT } from "../../constants";
 import request from "../../server";
-import Skill from "../../types/skills";
+import SkillType from "../../types/skills";
 
 interface initialStateType {
-  skills: Skill[];
+  skills: SkillType[];
   loading: boolean;
   total: number;
   isModalLoading: boolean;
@@ -22,7 +22,7 @@ export const getSkills = createAsyncThunk(
   "skill/fetching",
   async ({ search, page }: { search: string; page: number }) => {
     const params = { search, page, limit: LIMIT };
-    const { data } = await request.get<Skill[]>("skills", { params });
+    const { data } = await request.get<SkillType[]>("skills", { params });
     return data;
   }
 );
@@ -38,7 +38,10 @@ const skillSlice = createSlice({
       })
       .addCase(
         getSkills.fulfilled,
-        (state, { payload: { data, pagination } }: PayloadAction<Skill[]>) => {
+        (
+          state,
+          { payload: { data, pagination }}: PayloadAction<SkillType[]>
+        ) => {
           state.skills = data;
           state.total = pagination.total;
           state.loading = false;

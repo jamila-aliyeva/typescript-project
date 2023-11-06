@@ -3,10 +3,12 @@ import request from "../server";
 import { FormInstance } from "antd";
 import SkillType from "../types/skills";
 import UsersyType from "../types/user";
+import { LIMIT } from "../constants";
 
 interface UsersState {
   search: string;
   total: number;
+  page: number;
   loading: boolean;
   users: SkillType[];
   selected: null | string;
@@ -27,16 +29,17 @@ const useUsers = create<UsersState>()((set, get) => {
   };
   return {
     search: "",
+    page: 1,
     total: 0,
     loading: false,
-    users: [],
+    skills: [],
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
     getUsers: async () => {
       try {
-        const { search } = get();
-        const params = { search };
+        const { search, page } = get();
+        const params = { search, page, limit: LIMIT };
         setState({ loading: true });
         const { data } = await request.get<UsersyType[]>(`users`, {
           params,
