@@ -1,19 +1,28 @@
-import { Button, Flex, Form, Input, Modal, Space, Table } from "antd";
-import { Fragment, useEffect, useState } from "react";
-import useEducation from "../../zustand/education";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Pagination,
+  Space,
+  Table,
+} from "antd";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 
-import ExperiensesTypes from "../../types/experienses";
-import useExperienses from "../../zustand/experienses";
+import { LIMIT } from "../../constants";
+import usePortfolio from "../../zustand/portfolios";
 
-const Portfolios = () => {
+const SkillsPage = () => {
   const [form] = Form.useForm();
   const [data, setdata] = useState();
 
   const {
     search,
-    total,
     loading,
-    experiences,
+    total,
+    page,
+    portfolios,
     selected,
     isModalOpen,
     isModalLoading,
@@ -23,20 +32,15 @@ const Portfolios = () => {
     showModal,
     handleEdit,
     handleDelete,
-    getExperienses,
-  } = useExperienses();
+    getPorfolio,
+  } = usePortfolio();
 
   useEffect(() => {
-    getExperienses();
-    setdata<ExperiensesTypes[]>(experiences);
-  }, [getExperienses]);
+    getPorfolio();
+    setdata(portfolios);
+  }, [getPorfolio]);
 
   const columns = [
-    {
-      title: "Image",
-      dataIndex: "photo",
-      key: "photo",
-    },
     {
       title: "Name",
       dataIndex: "name",
@@ -46,32 +50,39 @@ const Portfolios = () => {
       title: "Url",
       dataIndex: "url",
       key: "url",
-      render: (url) => (
+      render: (
+        url: string | number | boolean | Iterable<ReactNode> | null | undefined
+      ) => (
         <a href={url} target="_blank" rel="noreferrer">
           {url}
         </a>
       ),
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
+      title: "Fullname",
+      render: (
+        _: string,
+        row: { user: { firstName: string; lastName: string } }
+      ) => `${row?.user?.firstName ?? "empty"} ${row?.user?.lastName ?? ""}`,
     },
-    // {
-    //   title: "Fullname",
-    //   render: (_, row) =>
-    //     `${row?.user?.firstName ?? ""} ${row?.user?.lastName ?? ""}`,
-    // },
     {
       title: "Action",
       dataIndex: "_id",
       key: "_id",
-      render: (id) => (
+      render: (id: string) => (
         <Space size="middle">
           <Button type="primary" onClick={() => handleEdit(form, id)}>
             Edit
           </Button>
-          <Button type="primary" danger onClick={() => handleDelete(id)}>
+          <Button
+            type="primary"
+            danger
+            onClick={() =>
+              Modal.confirm({
+                title: "Do you want to delete this message ?",
+                onOk: () => handleDelete(id),
+              })
+            }>
             Delete
           </Button>
         </Space>
@@ -86,7 +97,7 @@ const Portfolios = () => {
         }}
         title={() => (
           <Flex justify="space-between" gap={36} align="center">
-            <h1>Porfolios ({total})</h1>
+            <h1>Portfolio({total})</h1>
 
             <Input
               value={search}
@@ -95,29 +106,29 @@ const Portfolios = () => {
               placeholder="Searching..."
             />
             <Button onClick={() => showModal(form)} type="dashed">
-              Add porfolio
+              Add Portfolio
             </Button>
           </Flex>
         )}
         pagination={false}
         loading={loading}
-        dataSource={experiences}
+        dataSource={portfolios}
         columns={columns}
       />
 
-      {/* {total > LIMIT ? (
+      {total > LIMIT ? (
         <Pagination
           total={total}
           pageSize={LIMIT}
           current={page}
-          onChange={(page) => setPage(page)}
+          // onChange={(acti) => setPage(page)}
         />
-      ) : null} */}
+      ) : null}
       <Modal
         title="Category data"
         maskClosable={false}
         confirmLoading={isModalLoading}
-        okText={selected === null ? "Add education" : "Save education"}
+        okText={selected === null ? "Add Portfolio" : "Save Portfolio"}
         open={isModalOpen}
         onOk={() => handleOk(form)}
         onCancel={closeModal}>
@@ -131,9 +142,6 @@ const Portfolios = () => {
             span: 24,
           }}
           form={form}>
-          {/* <input type="file" onChange={handlePhoto} />
-          {photo ? <Image src={getImage(photo)} /> : null} */}
-
           <Form.Item
             label="Name"
             name="name"
@@ -175,4 +183,4 @@ const Portfolios = () => {
   );
 };
 
-export default Portfolios;
+export default SkillsPage;

@@ -2,6 +2,8 @@ import { create } from "zustand";
 import request from "../server";
 import { FormInstance } from "antd";
 import SkillType from "../types/skills";
+import { LIMIT, USER_ID } from "../constants";
+import Cookies from "js-cookie";
 
 interface SkillsState {
   search: string;
@@ -11,6 +13,12 @@ interface SkillsState {
   selected: null | string;
   isModalLoading: boolean;
   isModalOpen: boolean;
+  activeTab: string;
+  activePage: number;
+  page: number;
+  limit: number;
+  setActivePage: (page: number) => void;
+  setActiveTab: (key: string, form: FormInstance) => void;
   closeModal: () => void;
   handleOk: (form: FormInstance) => void;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,6 +26,7 @@ interface SkillsState {
   handleEdit: (form: FormInstance, id: string) => void;
   handleDelete: (id: string) => void;
   getSkills: () => void;
+  getUserSkills: () => void;
 }
 
 const useSkills = create<SkillsState>()((set, get) => {
@@ -29,19 +38,51 @@ const useSkills = create<SkillsState>()((set, get) => {
     total: 0,
     loading: false,
     skills: [],
+    activePage: 1,
+    activeTab: "1",
+    setActiveTab: (key, form) => {
+      if (key === "1") {
+        form.resetFields();
+        set((state) => ({ ...state, selected: null }));
+      }
+      set((state) => ({ ...state, activeTab: key }));
+    },
+    setActivePage: (page) => {
+      set((state) => ({ ...state, activePage: page }));
+      get().getSkills();
+    },
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
+    getUserSkills: async (id) => {
+      try {
+        setState({ loading: true });
+        const {
+          data: { data, pagination },
+        } = await request.get(`skills?user${id}`);
+        console.log(data);
+
+        setState({ skills: data, total: pagination.total });
+      } finally {
+        setState({ loading: false });
+      }
+    },
     getSkills: async () => {
       try {
-        const { search } = get();
-        const params = { search };
+        const params = {
+          user: Cookies.get(USER_ID),
+          search: get().search,
+          page: get().activePage,
+          limit: LIMIT,
+        };
         setState({ loading: true });
-        const { data } = await request.get<ExperiensesTypes[]>(`skills`, {
+        const {
+          data: { data, pagination },
+        } = await request.get("skills", {
           params,
         });
-        setState({ skills: data.data, total: data.data.length });
-        console.log(data);
+
+        setState({ skills: data, total: pagination.total });
       } finally {
         setState({ loading: false });
       }

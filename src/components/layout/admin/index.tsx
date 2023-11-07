@@ -38,9 +38,8 @@ const AdminLayout = ({ setIsLogin }) => {
 
   async function getUser() {
     try {
-      let res = await request.get("auth/me");
+      const res = await request.get("auth/me");
       setUser(res.data.firstName);
-      console.log(res.data);
 
       res;
     } catch (err) {
@@ -50,7 +49,7 @@ const AdminLayout = ({ setIsLogin }) => {
   }
   async function getPhoto() {
     try {
-      let { data } = await request.get("auth/me");
+      const { data } = await request.get("auth/me");
       setPhoto(data.photo);
     } catch (err) {
       console.log(err);
@@ -173,13 +172,14 @@ const AdminLayout = ({ setIsLogin }) => {
                 padding: "20px",
                 gap: "16px",
               }}>
-              <img
+              {/* <img
                 style={{ width: "35px", height: "36px", borderRadius: "50%" }}
                 src={photo}
                 alt=""
-              />
+              /> */}
               <h4 style={{ color: "white" }}>
-                {user}
+                {/* {user} */}
+                Your account
                 {}
               </h4>
             </Link>

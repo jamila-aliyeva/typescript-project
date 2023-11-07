@@ -1,15 +1,16 @@
 import { create } from "zustand";
-import request from "../server";
+import MessegesType from "../types/messeges";
 import { FormInstance } from "antd";
-import { LIMIT, USER_ID } from "../constants";
+import request from "../server";
 import Cookies from "js-cookie";
-import EducationType from "../types/education";
+import { LIMIT, USER_ID } from "../constants";
+// import { useState } from "react";
 
-interface EducationState {
+interface MessegesState {
   search: string;
   total: number;
   loading: boolean;
-  experiences: EducationType[];
+  messages: MessegesType[];
   selected: null | string;
   isModalLoading: boolean;
   isModalOpen: boolean;
@@ -17,6 +18,7 @@ interface EducationState {
   activePage: number;
   page: number;
   limit: number;
+  sortingOption: string;
   setActivePage: (page: number) => void;
   setActiveTab: (key: string, form: FormInstance) => void;
   closeModal: () => void;
@@ -25,10 +27,10 @@ interface EducationState {
   showModal: (form: FormInstance) => void;
   handleEdit: (form: FormInstance, id: string) => void;
   handleDelete: (id: string) => void;
-  getExperienses: () => void;
+  getMessages: (sortingOption: string) => void;
 }
 
-const useEducation = create<EducationState>()((set, get) => {
+const useMessages = create<MessegesState>((set, get) => {
   const setState = (obj: object) => {
     set((state) => ({ ...state, ...obj }));
   };
@@ -36,7 +38,7 @@ const useEducation = create<EducationState>()((set, get) => {
     search: "",
     total: 0,
     loading: false,
-    experiences: [],
+    messeges: [],
     activePage: 1,
     activeTab: "1",
     setActiveTab: (key, form) => {
@@ -48,27 +50,29 @@ const useEducation = create<EducationState>()((set, get) => {
     },
     setActivePage: (page) => {
       set((state) => ({ ...state, activePage: page }));
-      get().getExperienses();
+      get().getMessages();
     },
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
-    getExperienses: async () => {
+    getMessages: async (sortingOption) => {
       try {
         const params = {
           user: Cookies.get(USER_ID),
           search: get().search,
           page: get().activePage,
           limit: LIMIT,
+          sort: sortingOption,
         };
         setState({ loading: true });
         const {
           data: { data, pagination },
-        } = await request.get("experiences", {
+        } = await request.get("messages", {
           params,
         });
+        console.log(data);
 
-        setState({ experiences: data, total: pagination.total });
+        setState({ messages: data, total: pagination.total });
       } finally {
         setState({ loading: false });
       }
@@ -84,12 +88,12 @@ const useEducation = create<EducationState>()((set, get) => {
         setState({ isModalLoading: true });
 
         if (selected === null) {
-          await request.post(`experiences`, values);
+          await request.post(`messages`, values);
         } else {
-          await request.put(`experiences/${selected}`, values);
+          await request.put(`messages/${selected}`, values);
         }
 
-        get().getExperienses();
+        get().getMessages();
         form.resetFields();
       } finally {
         setState({ isModalOpen: false, isModalLoading: false });
@@ -97,7 +101,7 @@ const useEducation = create<EducationState>()((set, get) => {
     },
     handleSearch: (e) => {
       setState({ search: e.target.value });
-      get().getExperienses();
+      get().getMessages(get().sortingOption);
     },
     showModal: (form) => {
       setState({ isModalOpen: true, selected: null });
@@ -106,7 +110,7 @@ const useEducation = create<EducationState>()((set, get) => {
     handleEdit: async (form, id) => {
       try {
         setState({ selected: id, loading: true, isModalOpen: true });
-        const { data } = await request.get(`experiences/${id}`);
+        const { data } = await request.get(`messages/${id}`);
         form.setFieldValue(data);
       } finally {
         setState({ selected: id, loading: false });
@@ -115,13 +119,12 @@ const useEducation = create<EducationState>()((set, get) => {
     handleDelete: async (id) => {
       try {
         setState({ loading: true });
-        await request.delete(`experiences/${id}`);
-        get().getExperienses();
+        await request.delete(`messages/${id}`);
+        get().getMessages();
       } finally {
         setState({ selected: id, loading: false });
       }
     },
   };
 });
-
-export default useEducation;
+export default useMessages;

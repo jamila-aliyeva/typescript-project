@@ -1,19 +1,25 @@
 import { create } from "zustand";
 import request from "../server";
 import { FormInstance } from "antd";
-import SkillType from "../types/skills";
+import { LIMIT, USER_ID } from "../constants";
+import Cookies from "js-cookie";
+
 import UsersyType from "../types/user";
-import { LIMIT } from "../constants";
 
 interface UsersState {
   search: string;
   total: number;
-  page: number;
   loading: boolean;
-  users: SkillType[];
+  users: UsersyType[];
   selected: null | string;
   isModalLoading: boolean;
   isModalOpen: boolean;
+  activeTab: string;
+  activePage: number;
+  page: number;
+  limit: number;
+  setActivePage: (page: number) => void;
+  setActiveTab: (key: string, form: FormInstance) => void;
   closeModal: () => void;
   handleOk: (form: FormInstance) => void;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,23 +35,41 @@ const useUsers = create<UsersState>()((set, get) => {
   };
   return {
     search: "",
-    page: 1,
     total: 0,
     loading: false,
-    skills: [],
+    experiences: [],
+    activePage: 1,
+    activeTab: "1",
+    setActiveTab: (key, form) => {
+      if (key === "1") {
+        form.resetFields();
+        set((state) => ({ ...state, selected: null }));
+      }
+      set((state) => ({ ...state, activeTab: key }));
+    },
+    setActivePage: (page) => {
+      set((state) => ({ ...state, activePage: page }));
+      get().getUsers();
+    },
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
     getUsers: async () => {
       try {
-        const { search, page } = get();
-        const params = { search, page, limit: LIMIT };
+        const params = {
+          user: Cookies.get(USER_ID),
+          search: get().search,
+          page: get().activePage,
+          limit: LIMIT,
+        };
         setState({ loading: true });
-        const { data } = await request.get<UsersyType[]>(`users`, {
+        const {
+          data: { data, pagination },
+        } = await request.get("users", {
           params,
         });
-        setState({ skills: data.data, total: data.data.length });
-        console.log(data);
+
+        setState({ users: data, total: pagination.total });
       } finally {
         setState({ loading: false });
       }
@@ -69,7 +93,7 @@ const useUsers = create<UsersState>()((set, get) => {
         get().getUsers();
         form.resetFields();
       } finally {
-        setState({ isModalLoading: false });
+        setState({ isModalOpen: false, isModalLoading: false });
       }
     },
     handleSearch: (e) => {

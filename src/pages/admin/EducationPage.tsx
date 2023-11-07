@@ -1,8 +1,18 @@
-import { Button, Flex, Form, Input, Modal, Space, Table } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Pagination,
+  Space,
+  Table,
+} from "antd";
 import { Fragment, useEffect, useState } from "react";
 import useEducation from "../../zustand/education";
 
 import EducationType from "../../types/education";
+import { LIMIT } from "../../constants";
 
 const Education = () => {
   const [form] = Form.useForm();
@@ -16,6 +26,7 @@ const Education = () => {
     selected,
     isModalOpen,
     isModalLoading,
+    page,
     closeModal,
     handleOk,
     handleSearch,
@@ -50,7 +61,15 @@ const Education = () => {
           <Button type="primary" onClick={() => handleEdit(form, id)}>
             Edit
           </Button>
-          <Button type="primary" danger onClick={() => handleDelete(id)}>
+          <Button
+            type="primary"
+            danger
+            onClick={() =>
+              Modal.confirm({
+                title: "Do you want to delete this message ?",
+                onOk: () => handleDelete(id),
+              })
+            }>
             Delete
           </Button>
         </Space>
@@ -84,14 +103,14 @@ const Education = () => {
         columns={columns}
       />
 
-      {/* {total > LIMIT ? (
+      {total > LIMIT ? (
         <Pagination
           total={total}
           pageSize={LIMIT}
           current={page}
-          onChange={(page) => setPage(page)}
+          // onChange={(page) => setPage(page)}
         />
-      ) : null} */}
+      ) : null}
       <Modal
         title="Category data"
         maskClosable={false}

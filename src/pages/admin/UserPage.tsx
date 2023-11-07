@@ -40,7 +40,7 @@ const UserPage = () => {
     search,
     loading,
     total,
-    skills,
+    users,
     selected,
     isModalOpen,
     isModalLoading,
@@ -54,8 +54,8 @@ const UserPage = () => {
   } = useUsers();
 
   useEffect(() => {
-    getUsers({ page });
-    setdata<UsersyType[]>(skills);
+    getUsers();
+    setdata<UsersyType[]>(users);
   }, [getUsers, page]);
 
   const columns = [
@@ -96,7 +96,15 @@ const UserPage = () => {
           <Button type="primary" onClick={() => handleEdit(form, id)}>
             Edit
           </Button>
-          <Button type="primary" danger onClick={() => handleDelete(id)}>
+          <Button
+            type="primary"
+            danger
+            onClick={() =>
+              Modal.confirm({
+                title: "Do you want to delete this message ?",
+                onOk: () => handleDelete(id),
+              })
+            }>
             Delete
           </Button>
           <Button onClick={() => upgradeToClient(id)}>Add to Client</Button>
@@ -127,7 +135,7 @@ const UserPage = () => {
         )}
         pagination={false}
         loading={loading}
-        dataSource={skills}
+        dataSource={users}
         columns={columns}
       />
 

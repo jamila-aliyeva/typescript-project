@@ -1,9 +1,19 @@
-import { Button, Flex, Form, Input, Modal, Space, Table } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Pagination,
+  Space,
+  Table,
+} from "antd";
 import { Fragment, useEffect, useState } from "react";
 import useEducation from "../../zustand/education";
 
 import ExperiensesTypes from "../../types/experienses";
 import useExperienses from "../../zustand/experienses";
+import { LIMIT } from "../../constants";
 
 const Experienses = () => {
   const [form] = Form.useForm();
@@ -16,6 +26,7 @@ const Experienses = () => {
     experiences,
     selected,
     isModalOpen,
+    page,
     isModalLoading,
     closeModal,
     handleOk,
@@ -56,7 +67,15 @@ const Experienses = () => {
           <Button type="primary" onClick={() => handleEdit(form, id)}>
             Edit
           </Button>
-          <Button type="primary" danger onClick={() => handleDelete(id)}>
+          <Button
+            type="primary"
+            danger
+            onClick={() =>
+              Modal.confirm({
+                title: "Do you want to delete this message ?",
+                onOk: () => handleDelete(id),
+              })
+            }>
             Delete
           </Button>
         </Space>
@@ -90,14 +109,14 @@ const Experienses = () => {
         columns={columns}
       />
 
-      {/* {total > LIMIT ? (
+      {total > LIMIT ? (
         <Pagination
           total={total}
           pageSize={LIMIT}
           current={page}
-          onChange={(page) => setPage(page)}
+          // onChange={(page) => setPage(page)}
         />
-      ) : null} */}
+      ) : null}
       <Modal
         title="Category data"
         maskClosable={false}

@@ -28,9 +28,7 @@ const UserLayout = () => {
     try {
       const res = await request.get("auth/me");
       setFirstName(res.data.firstName);
-      console.log(res.data.firstName);
     } catch (err) {
-      console.log(err);
       message.error("error!!!");
     }
   }
@@ -38,9 +36,7 @@ const UserLayout = () => {
     try {
       const res = await request.get("auth/me");
       setlastName(res.data.lastName);
-      console.log(res.data.lastName);
     } catch (err) {
-      console.log(err);
       message.error("error!!!");
     }
   }
@@ -118,14 +114,15 @@ const UserLayout = () => {
                 paddingInline: "20px",
                 gap: "16px",
               }}>
-              <img
+              {/* <img
                 style={{ width: "35px", height: "36px", borderRadius: "50%" }}
                 src="https://img.freepik.com/free-photo/glowing-spaceship-orbits-planet-starry-galaxy-generated-by-ai_188544-9655.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1699056000&semt=sph"
                 alt=""
-              />
-              <h4 style={{ color: "white" }}>
-                {firstName} {lastName}
-              </h4>
+              /> */}
+              <h3 style={{ color: "white" }}>
+                {/* {firstName} {lastName} */}
+                Your account
+              </h3>
             </Link>
           </div>
         </Header>

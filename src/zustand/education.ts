@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import request from "../server";
 import { FormInstance } from "antd";
-
+import { LIMIT, USER_ID } from "../constants";
+import Cookies from "js-cookie";
 import EducationType from "../types/education";
 
 interface EducationState {
@@ -12,6 +13,12 @@ interface EducationState {
   selected: null | string;
   isModalLoading: boolean;
   isModalOpen: boolean;
+  activeTab: string;
+  activePage: number;
+  page: number;
+  limit: number;  
+  setActivePage: (page: number) => void;
+  setActiveTab: (key: string, form: FormInstance) => void;
   closeModal: () => void;
   handleOk: (form: FormInstance) => void;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,20 +36,39 @@ const useEducation = create<EducationState>()((set, get) => {
     search: "",
     total: 0,
     loading: false,
-    education: [],
+    skills: [],
+    activePage: 1,
+    activeTab: "1",
+    setActiveTab: (key, form) => {
+      if (key === "1") {
+        form.resetFields();
+        set((state) => ({ ...state, selected: null }));
+      }
+      set((state) => ({ ...state, activeTab: key }));
+    },
+    setActivePage: (page) => {
+      set((state) => ({ ...state, activePage: page }));
+      get().getEducation();
+    },
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
     getEducation: async () => {
       try {
-        const { search } = get();
-        const params = { search };
+        const params = {
+          user: Cookies.get(USER_ID),
+          search: get().search,
+          page: get().activePage,
+          limit: LIMIT,
+        };
         setState({ loading: true });
-        const { data } = await request.get<EducationType[]>(`education`, {
+        const {
+          data: { data, pagination },
+        } = await request.get("education", {
           params,
         });
-        setState({ education: data.data, total: data.data.length });
-        console.log(data);
+
+        setState({ education: data, total: pagination.total });
       } finally {
         setState({ loading: false });
       }
@@ -60,13 +86,13 @@ const useEducation = create<EducationState>()((set, get) => {
         if (selected === null) {
           await request.post(`education`, values);
         } else {
-          await request.put(`education${selected}`, values);
+          await request.put(`education/${selected}`, values);
         }
 
         get().getEducation();
         form.resetFields();
       } finally {
-        setState({ isModalLoading: false });
+        setState({ isModalOpen: false, isModalLoading: false });
       }
     },
     handleSearch: (e) => {
