@@ -2,6 +2,7 @@ import {
   Button,
   Flex,
   Form,
+  Image,
   Input,
   Modal,
   Pagination,
@@ -12,8 +13,10 @@ import { Fragment, ReactNode, useEffect, useState } from "react";
 
 import { LIMIT } from "../../constants";
 import usePortfolio from "../../zustand/portfolios";
+import { getImage } from "../../utils/images";
+import { PhotoType } from "../../types/porfolios";
 
-const SkillsPage = () => {
+const Portfolios = () => {
   const [form] = Form.useForm();
   const [data, setdata] = useState();
 
@@ -28,6 +31,7 @@ const SkillsPage = () => {
     selected,
     isModalOpen,
     isModalLoading,
+    uploadPhoto,
     closeModal,
     handleOk,
     handleSearch,
@@ -43,6 +47,14 @@ const SkillsPage = () => {
   }, [getPorfolio]);
 
   const columns = [
+    {
+      title: "Image",
+      dataIndex: "photo",
+      key: "photo",
+      render: (data: PhotoType) => (
+        <Image height={50} width={50} src={getImage(data)} />
+      ),
+    },
     {
       title: "Name",
       dataIndex: "name",
@@ -179,10 +191,17 @@ const SkillsPage = () => {
             ]}>
             <Input />
           </Form.Item>
+          <div>
+            <input
+              className="upload-btn"
+              type="file"
+              onChange={(e) => uploadPhoto(e)}
+            />
+          </div>
         </Form>
       </Modal>
     </Fragment>
   );
 };
 
-export default SkillsPage;
+export default Portfolios;

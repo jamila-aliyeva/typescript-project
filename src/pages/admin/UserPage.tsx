@@ -2,6 +2,7 @@ import {
   Button,
   Flex,
   Form,
+  Image,
   Input,
   Modal,
   Pagination,
@@ -19,6 +20,8 @@ import {
   useGetUserMutation,
   useUpgradeUserMutation,
 } from "../../redux/query/user";
+import { PhotoType } from "../../types/porfolios";
+import { getImage } from "../../utils/images";
 
 const UserPage = () => {
   const [page, setPage] = useState(1);
@@ -45,6 +48,7 @@ const UserPage = () => {
     isModalOpen,
     isModalLoading,
     activePage,
+    uploadPhoto,
     setActivePage,
     closeModal,
     handleOk,
@@ -61,6 +65,14 @@ const UserPage = () => {
   }, [getUsers, page]);
 
   const columns = [
+    {
+      title: "Image",
+      dataIndex: "photo",
+      key: "photo",
+      render: (data: PhotoType) => (
+        <Image height={50} width={50} src={getImage(data)} />
+      ),
+    },
     {
       title: "First name",
       dataIndex: "firstName",
@@ -219,6 +231,13 @@ const UserPage = () => {
               <Input.Password />
             </Form.Item>
           ) : null}
+          <div>
+            <input
+              className="upload-btn"
+              type="file"
+              onChange={(e) => uploadPhoto(e)}
+            />
+          </div>
         </Form>
       </Modal>
     </Fragment>

@@ -5,4 +5,10 @@ interface PortfoliosType {
   lastname: string;
 }
 
+export interface PhotoType {
+  _id: string;
+  name: string;
+  user: string;
+  __v: number;
+}
 export default PortfoliosType;

@@ -4,11 +4,21 @@ import { FormInstance } from "antd";
 import { LIMIT, USER_ID } from "../constants";
 import Cookies from "js-cookie";
 import PortfoliosType from "../types/porfolios";
+import { RcFile } from "antd/es/upload";
+import { AxiosResponse } from "axios";
+
+interface PhotoDataTypes {
+  _id: string;
+  name: string;
+  user: string;
+  __v: number;
+}
 
 interface PortfoliosState {
   search: string;
   total: number;
   loading: boolean;
+  loadingPhoto: boolean;
   portfolios: PortfoliosType;
   selected: null | string;
   isModalLoading: boolean;
@@ -17,6 +27,8 @@ interface PortfoliosState {
   activePage: number;
   page: number;
   limit: number;
+  photo: AxiosResponse | null;
+  uploadPhoto: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setActivePage: (page: number) => void;
   setActiveTab: (key: string, form: FormInstance) => void;
   closeModal: () => void;
@@ -36,6 +48,8 @@ const usePortfolio = create<PortfoliosState>()((set, get) => {
     search: "",
     total: 0,
     loading: false,
+    loadingPhoto: false,
+    photo: null,
     portfolios: [],
     activePage: 1,
     activeTab: "1",
@@ -120,6 +134,14 @@ const usePortfolio = create<PortfoliosState>()((set, get) => {
       } finally {
         setState({ selected: id, loading: false });
       }
+    },
+    uploadPhoto: async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formData = new FormData();
+      const target = e.target as HTMLInputElement;
+      const file: File = (target.files as FileList)[0];
+      formData.append("file", file);
+      const data = await request.post("upload", formData);
+      set({ photo: data });
     },
   };
 });

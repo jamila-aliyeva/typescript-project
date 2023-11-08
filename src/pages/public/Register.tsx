@@ -57,9 +57,10 @@ const Register = () => {
                 <input type="text" name="username" placeholder="Username" />
                 <input type="password" name="password" placeholder="Password" />
                 {/* <input type="password" placeholder="Confirm password" /> */}
-                <Link to="/profile">
+                {/* <Link to="/profile">
                   <button>Register</button>
-                </Link>
+                </Link> */}
+                <button>Register</button>
               </form>
             </div>
           </div>

@@ -1,8 +1,11 @@
 import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { IS_LOGIN } from "../../constants";
+import { authName } from "../../redux/slice/auth";
+import { useSelector } from "react-redux";
 
 const ProfilePage = ({ setIsLogin }) => {
+  const { isAuthenticated, user } = useSelector((state) => state[authName]);
   const navigate = useNavigate();
   const logout = () => {
     Modal.confirm({
@@ -29,9 +32,11 @@ const ProfilePage = ({ setIsLogin }) => {
             width: "500px",
             marginBottom: "28px",
           }}>
-          Your role is user. If the admin update your role to client, then you
+          {isAuthenticated && user === "user"
+            ? `Your role is user. If the admin update your role to client, then you
           can add or update your experiences, skills, portfolios. To update your
-          role, you can apply ti the admin!
+          role, you can apply ti the admin!`
+            : `Your role is client. You can change your experiences, skills, portfolios.`}
         </h3>
         <Button onClick={logout}>Logout</Button>
       </div>
