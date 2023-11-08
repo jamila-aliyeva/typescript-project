@@ -107,11 +107,11 @@ const useUsers = create<UsersState>()((set, get) => {
       setState({ isModalOpen: true, selected: null });
       form.resetFields();
     },
-    handleEdit: async (form, id) => {
+    handleEdit: async (form, id: string, value: string) => {
       try {
         setState({ selected: id, loading: true, isModalOpen: true });
         const { data } = await request.get(`users/${id}`);
-        form.setFieldValue(data);
+        form.setFieldValue(data, value);
       } finally {
         setState({ selected: id, loading: false });
       }
