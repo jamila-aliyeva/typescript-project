@@ -44,6 +44,8 @@ const UserPage = () => {
     selected,
     isModalOpen,
     isModalLoading,
+    activePage,
+    setActivePage,
     closeModal,
     handleOk,
     handleSearch,
@@ -143,8 +145,8 @@ const UserPage = () => {
         <Pagination
           total={total}
           pageSize={LIMIT}
-          current={page}
-          onChange={(page) => setPage(page)}
+          current={activePage}
+          onChange={(page) => setActivePage(page)}
         />
       ) : null}
       <Modal

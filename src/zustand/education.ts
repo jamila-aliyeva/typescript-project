@@ -16,7 +16,7 @@ interface EducationState {
   activeTab: string;
   activePage: number;
   page: number;
-  limit: number;  
+  limit: number;
   setActivePage: (page: number) => void;
   setActiveTab: (key: string, form: FormInstance) => void;
   closeModal: () => void;
@@ -28,50 +28,31 @@ interface EducationState {
   getEducation: () => void;
 }
 
-const useEducation = create<EducationState>()((set, get) => {
-  const setState = (obj: object) => {
+const useEducation = create<EducationState>((set, get) => {
+  const setState = (obj: Partial<EducationState>) => {
     set((state) => ({ ...state, ...obj }));
   };
   return {
     search: "",
     total: 0,
     loading: false,
-    skills: [],
-    activePage: 1,
-    activeTab: "1",
-    setActiveTab: (key, form) => {
-      if (key === "1") {
-        form.resetFields();
-        set((state) => ({ ...state, selected: null }));
-      }
-      set((state) => ({ ...state, activeTab: key }));
-    },
-    setActivePage: (page) => {
-      set((state) => ({ ...state, activePage: page }));
-      get().getEducation();
-    },
+    education: [],
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
-    getEducation: async () => {
-      try {
-        const params = {
-          user: Cookies.get(USER_ID),
-          search: get().search,
-          page: get().activePage,
-          limit: LIMIT,
-        };
-        setState({ loading: true });
-        const {
-          data: { data, pagination },
-        } = await request.get("education", {
-          params,
-        });
-
-        setState({ education: data, total: pagination.total });
-      } finally {
-        setState({ loading: false });
+    activeTab: "1",
+    activePage: 1,
+    limit: LIMIT,
+    setActiveTab: (key, form) => {
+      if (key === "1") {
+        form.resetFields();
+        setState({ selected: null });
       }
+      setState({ activeTab: key });
+    },
+    setActivePage: (page) => {
+      setState({ activePage: page });
+      get().getEducation();
     },
     closeModal: () => {
       setState({ isModalOpen: false });
@@ -107,9 +88,9 @@ const useEducation = create<EducationState>()((set, get) => {
       try {
         setState({ selected: id, loading: true, isModalOpen: true });
         const { data } = await request.get(`education/${id}`);
-        form.setFieldValue(data);
+        form.setFieldsValue(data);
       } finally {
-        setState({ selected: id, loading: false });
+        setState({ loading: false });
       }
     },
     handleDelete: async (id) => {
@@ -118,7 +99,26 @@ const useEducation = create<EducationState>()((set, get) => {
         await request.delete(`education/${id}`);
         get().getEducation();
       } finally {
-        setState({ selected: id, loading: false });
+        setState({ loading: false });
+      }
+    },
+    getEducation: async () => {
+      try {
+        const { search, activePage, limit } = get();
+        const params = {
+          user: Cookies.get(USER_ID),
+          search,
+          page: activePage,
+          limit,
+        };
+        setState({ loading: true });
+        const response = await request.get("education", {
+          params,
+        });
+        const { data, pagination } = response.data;
+        setState({ education: data, total: pagination.total });
+      } finally {
+        setState({ loading: false });
       }
     },
   };

@@ -9,7 +9,6 @@ import {
   Table,
 } from "antd";
 import { Fragment, useEffect, useState } from "react";
-import useEducation from "../../zustand/education";
 
 import ExperiensesTypes from "../../types/experienses";
 import useExperienses from "../../zustand/experienses";
@@ -28,6 +27,8 @@ const Experienses = () => {
     isModalOpen,
     page,
     isModalLoading,
+    activePage,
+    setActivePage,
     closeModal,
     handleOk,
     handleSearch,
@@ -113,8 +114,8 @@ const Experienses = () => {
         <Pagination
           total={total}
           pageSize={LIMIT}
-          current={page}
-          // onChange={(page) => setPage(page)}
+          current={activePage}
+          onChange={(page) => setActivePage(page)}
         />
       ) : null}
       <Modal

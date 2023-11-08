@@ -27,6 +27,8 @@ const Education = () => {
     isModalOpen,
     isModalLoading,
     page,
+    activePage,
+    setActivePage,
     closeModal,
     handleOk,
     handleSearch,
@@ -107,8 +109,8 @@ const Education = () => {
         <Pagination
           total={total}
           pageSize={LIMIT}
-          current={page}
-          // onChange={(page) => setPage(page)}
+          current={activePage}
+          onChange={(page) => setActivePage(page)}
         />
       ) : null}
       <Modal

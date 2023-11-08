@@ -28,6 +28,8 @@ const Messeges = () => {
     selected,
     isModalOpen,
     isModalLoading,
+    activePage,
+    setActivePage,
     closeModal,
     handleOk,
     handleSearch,
@@ -147,8 +149,8 @@ const Messeges = () => {
         <Pagination
           total={total}
           pageSize={LIMIT}
-          current={page}
-          // onChange={(acti) => setPage(page)}
+          current={activePage}
+          onChange={(page) => setActivePage(page)}
         />
       ) : null}
       <Modal

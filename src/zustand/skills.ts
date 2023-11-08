@@ -40,33 +40,13 @@ const useSkills = create<SkillsState>()((set, get) => {
     skills: [],
     activePage: 1,
     activeTab: "1",
-    setActiveTab: (key, form) => {
-      if (key === "1") {
-        form.resetFields();
-        set((state) => ({ ...state, selected: null }));
-      }
-      set((state) => ({ ...state, activeTab: key }));
-    },
-    setActivePage: (page) => {
+    setActivePage: async (page) => {
       set((state) => ({ ...state, activePage: page }));
       get().getSkills();
     },
     selected: null,
     isModalLoading: false,
     isModalOpen: false,
-    getUserSkills: async (id) => {
-      try {
-        setState({ loading: true });
-        const {
-          data: { data, pagination },
-        } = await request.get(`skills?user${id}`);
-        console.log(data);
-
-        setState({ skills: data, total: pagination.total });
-      } finally {
-        setState({ loading: false });
-      }
-    },
     getSkills: async () => {
       try {
         const params = {
@@ -77,12 +57,15 @@ const useSkills = create<SkillsState>()((set, get) => {
         };
         setState({ loading: true });
         const {
-          data: { data, pagination },
+          data: {
+            data,
+            pagination: { total },
+          },
         } = await request.get("skills", {
           params,
         });
 
-        setState({ skills: data, total: pagination.total });
+        setState({ skills: data, total: total });
       } finally {
         setState({ loading: false });
       }

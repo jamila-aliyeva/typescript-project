@@ -22,6 +22,8 @@ const SkillsPage = () => {
     loading,
     total,
     page,
+    setActivePage,
+    activePage,
     portfolios,
     selected,
     isModalOpen,
@@ -120,8 +122,8 @@ const SkillsPage = () => {
         <Pagination
           total={total}
           pageSize={LIMIT}
-          current={page}
-          // onChange={(acti) => setPage(page)}
+          current={activePage}
+          onChange={(page) => setActivePage(page)}
         />
       ) : null}
       <Modal
