@@ -34,7 +34,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/" element={<UserLayout />}>
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route
+            path="/profile"
+            element={<ProfilePage setIsLogin={undefined} />}
+          />
           <Route path="/userSkill" element={<UserSkill />} />
           <Route path="/userEducation" element={<UserEducation />} />
           <Route path="/userPortfolios" element={<UserPortfolio />} />
@@ -42,7 +45,7 @@ function App() {
         <Route
           element={
             isAuthenticated && user?.role === "admin" ? (
-              <AdminLayout />
+              <AdminLayout setIsLogin={undefined} />
             ) : (
               <Navigate to="/login" />
             )
